@@ -17,6 +17,9 @@ function buildRain() {
   }
 }
 
+const STORM_DURATION = 7000;
+const CLEAR_DURATION = 7000;
+
 function goClear() {
   document.getElementById("hero").classList.add("clear");
 }
@@ -25,17 +28,15 @@ function goStorm() {
   document.getElementById("hero").classList.remove("clear");
 }
 
-let transitionTimer;
-
-function startSequence() {
+function loopWeather() {
   goStorm();
+  setTimeout(() => {
+    goClear();
+    setTimeout(loopWeather, CLEAR_DURATION);
+  }, STORM_DURATION);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
   buildRain();
-  transitionTimer = setTimeout(goClear, 3500);
-}
-
-function replay() {
-  clearTimeout(transitionTimer);
-  startSequence();
-}
-
-document.addEventListener("DOMContentLoaded", startSequence);
+  loopWeather();
+});

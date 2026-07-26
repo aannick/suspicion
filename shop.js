@@ -1,8 +1,8 @@
 const EVENTS = [
-  { id: "twilight-tour", name: "Twilight Tour of the West Wing", date: "Nightly, 6:00 PM", venue: "Cadaver Manor", price: 28 },
-  { id: "candlelit-tour", name: "Candlelit Evening Walkthrough", date: "Nightly, 8:30 PM", venue: "Cadaver Manor", price: 42 },
-  { id: "full-moon-vigil", name: "Full Moon Vigil", date: "Next full moon, 11:00 PM", venue: "Cadaver Manor, Attic", price: 60 },
-  { id: "family-day-tour", name: "Family Day Tour", date: "Saturdays, 11:00 AM", venue: "Cadaver Manor, Grounds", price: 18 },
+  { id: "twilight-tour", name: "Twilight Tour of the West Wing", date: "Nightly, 6:00 PM", venue: "Cadaver Mansion", price: 28 },
+  { id: "candlelit-tour", name: "Candlelit Evening Walkthrough", date: "Nightly, 8:30 PM", venue: "Cadaver Mansion", price: 42 },
+  { id: "full-moon-vigil", name: "Full Moon Vigil", date: "Next full moon, 11:00 PM", venue: "Cadaver Mansion, Attic", price: 60 },
+  { id: "family-day-tour", name: "Family Day Tour", date: "Saturdays, 11:00 AM", venue: "Cadaver Mansion, Grounds", price: 18 },
 ];
 
 const CART_KEY = "manorCart";
