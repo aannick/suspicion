@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart — Cadaver Manor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <header class="site">
+    <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">CADAVER<span> MANOR</span></a>
+    <nav>
+      <a href="tickets.html">Tours</a>
+      <a href="cart.html" data-cart-count>Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">Step 1 of 2</div>
+    <h1>Your cart</h1>
+
+    <div id="cart-list"></div>
+    <div id="cart-summary"></div>
+  </main>
+
+  <script src="shop.js"></script>
+  <script>
+    function renderCart() {
+      const items = cartWithDetails();
+      const list = document.getElementById("cart-list");
+      const summary = document.getElementById("cart-summary");
+
+      if (items.length === 0) {
+        list.innerHTML = `<div class="empty-state">Your cart is empty. <a href="tickets.html">Browse tours →</a></div>`;
+        summary.innerHTML = "";
+        return;
+      }
+
+      list.innerHTML = items.map(item => `
+        <div class="stub">
+          <div class="stub-main">
+            <h3>${item.name}</h3>
+            <div class="stub-meta">${item.date} · ${item.venue}</div>
+            <div style="margin-top:0.6rem; display:flex; align-items:center; gap:0.5rem;">
+              <label style="font-size:0.8rem; color:var(--text-dim);">Qty</label>
+              <input type="number" min="1" value="${item.qty}" style="width:60px; background:var(--bg); border:1px solid var(--stub-edge); color:var(--text); padding:0.3rem; border-radius:4px;"
+                onchange="handleQtyChange('${item.id}', this.value)">
+              <button class="btn-danger" style="margin-left:0.75rem; padding:0.4rem 0.7rem;" onclick="handleRemove('${item.id}')">Remove</button>
+            </div>
+          </div>
+          <div class="stub-tear"></div>
+          <div class="stub-side">
+            <div class="stub-price">${formatPrice(item.price * item.qty)}</div>
+          </div>
+        </div>
+      `).join("");
+
+      summary.innerHTML = `
+        <div class="summary">
+          <div class="summary-row"><span>Subtotal</span><span>${formatPrice(cartTotal())}</span></div>
+          <div class="summary-row"><span>Service fee</span><span>${formatPrice(cartTotal() * 0.1)}</span></div>
+          <div class="summary-row total"><span>Total</span><span>${formatPrice(cartTotal() * 1.1)}</span></div>
+        </div>
+        <a href="checkout.html" class="btn btn-primary">Proceed to checkout →</a>
+      `;
+    }
+
+    function handleQtyChange(id, val) {
+      updateQty(id, parseInt(val, 10) || 1);
+      renderCart();
+      updateCartBadge();
+    }
+
+    function handleRemove(id) {
+      removeFromCart(id);
+      renderCart();
+      updateCartBadge();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>

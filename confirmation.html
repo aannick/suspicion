@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmed — Cadaver Manor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <header class="site">
+    <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">CADAVER<span> MANOR</span></a>
+    <nav>
+      <a href="tickets.html">Tours</a>
+      <a href="cart.html" data-cart-count>Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <div id="confirmation-content"></div>
+  </main>
+
+  <script src="shop.js"></script>
+  <script>
+    function renderConfirmation() {
+      const raw = localStorage.getItem("lastOrder");
+      const content = document.getElementById("confirmation-content");
+
+      if (!raw) {
+        content.innerHTML = `<div class="empty-state">No recent order found. <a href="tickets.html">Browse tours →</a></div>`;
+        return;
+      }
+
+      const order = JSON.parse(raw);
+
+      content.innerHTML = `
+        <div class="eyebrow">You're expected</div>
+        <h1>Thank you, ${order.name.split(" ")[0] || "guest"}.</h1>
+
+        <div class="confirm-ticket">
+          <div class="eyebrow">Order confirmed</div>
+          <div class="order-num">${order.orderNumber}</div>
+          <p style="color: var(--text-dim);">
+            ${order.items.map(i => `${i.qty} × ${i.name}`).join("<br>")}
+          </p>
+          <p class="mono" style="font-size: 1.1rem; color: var(--brass); margin-top: 1rem;">
+            ${formatPrice(order.total)} paid
+          </p>
+        </div>
+
+        <p style="color: var(--text-dim);">A confirmation would normally be sent to your email. Since this is a demo, nothing was actually charged or sent. The gate will be unlocked at the hour of your tour.</p>
+        <a href="tickets.html" class="btn btn-secondary">Back to tours</a>
+      `;
+    }
+
+    renderConfirmation();
+  </script>
+</body>
+</html>

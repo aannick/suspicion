@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tour Tickets — Cadaver Manor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <header class="site">
+    <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">CADAVER<span> MANOR</span></a>
+    <nav>
+      <a href="tickets.html">Tours</a>
+      <a href="cart.html" data-cart-count>Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">Upcoming tours</div>
+    <h1>Come inside, if you dare.</h1>
+    <p style="color: var(--text-dim); margin-bottom: 2rem;">
+      This is a demo storefront built for a school project — no real payment is processed. Add a tour to your cart and click through checkout.
+    </p>
+
+    <div id="event-list"></div>
+  </main>
+
+  <script src="shop.js"></script>
+  <script>
+    function renderEvents() {
+      const list = document.getElementById("event-list");
+      list.innerHTML = EVENTS.map(ev => `
+        <div class="stub">
+          <div class="stub-main">
+            <h3>${ev.name}</h3>
+            <div class="stub-meta">${ev.date} · ${ev.venue}</div>
+          </div>
+          <div class="stub-tear"></div>
+          <div class="stub-side">
+            <div class="stub-price">${formatPrice(ev.price)}</div>
+            <button class="btn-primary" onclick="handleAdd('${ev.id}', this)">Add to cart</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    function handleAdd(id, btn) {
+      addToCart(id);
+      updateCartBadge();
+      const original = btn.textContent;
+      btn.textContent = "Added ✓";
+      btn.disabled = true;
+      setTimeout(() => {
+        btn.textContent = original;
+        btn.disabled = false;
+      }, 900);
+    }
+
+    renderEvents();
+  </script>
+</body>
+</html>
