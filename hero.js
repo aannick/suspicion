@@ -17,8 +17,8 @@ function buildRain() {
   }
 }
 
-const STORM_DURATION = 7000;
-const CLEAR_DURATION = 7000;
+const STORM_DURATION = 9000;
+const CLEAR_DURATION = 9000;
 
 function goClear() {
   document.getElementById("hero").classList.add("clear");
