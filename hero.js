@@ -7,7 +7,7 @@ const chimeAudio = document.getElementById("chime-audio");
 
 rainAudio.volume = 0.4;
 thunderAudio.volume = 0.3;
-chimeAudio.volume = 0.8;
+chimeAudio.volume = 0.3
 
 function enterMansion() {
   const acceptBtn = document.getElementById("accept-btn");
