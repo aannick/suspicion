@@ -8,14 +8,19 @@
 </head>
 <body>
 
+<section class="invitation-gate" id="invitation-gate">
+  <div class="invitation-card">
+    <img src="invitation.png" alt="An invitation from Mr. and Mrs. Cadaver" class="invitation-img">
+    <button class="btn-accept" id="accept-btn" onclick="enterMansion()">Accept the Invitation</button>
+  </div>
+</section>
+
 <section class="hero" id="hero">
   <div class="hero-photo" id="hero-photo"></div>
   <div class="hero-tint" id="hero-tint"></div>
   <div class="hero-rain" id="hero-rain"></div>
   <div class="hero-flash" id="hero-flash"></div>
   <div class="hero-vignette"></div>
-
-
 
   <div class="hero-content">
     <p class="eyebrow">Est. 1891</p>
@@ -28,6 +33,9 @@
   </div>
 </section>
 
+<audio id="rain-audio" src="sounds/rain.mp3" loop></audio>
+<audio id="thunder-audio" src="sounds/thunder.mp3"></audio>
+<audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
 <script src="hero.js"></script>
 </body>
 </html>

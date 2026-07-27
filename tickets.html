@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tour Tickets — Cadaver Mansion</title>
+  <title>Reserve Your Seat — Cadaver Mansion</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="shop.css">
@@ -19,37 +19,112 @@
   </header>
 
   <main>
-    <div class="eyebrow">Upcoming tours</div>
-    <h1>Come inside, if you dare.</h1>
+    <div class="eyebrow">Reserve your seat</div>
+    <h1>Mr. and Mrs. Cadaver's Dinner Party</h1>
     <p style="color: var(--text-dim); margin-bottom: 2rem;">
-      This is a demo storefront built for a school project — no real payment is processed. Add a tour to your cart and click through checkout.
+      Choose a date and seating time (subject to availability at the attraction), then add your party to the cart.
+      Of note, there is no real payment processed while using this website.
     </p>
 
-    <div id="event-list"></div>
+    <div class="summary" style="margin-bottom: 2rem;">
+      <div class="field">
+        <label for="res-date">Date</label>
+        <input type="date" id="res-date" required>
+      </div>
+
+      <div class="field">
+        <label for="res-time">Seating time</label>
+        <select id="res-time" style="width:100%; background:var(--bg-raised); border:1px solid var(--stub-edge); color:var(--text); padding:0.65rem 0.8rem; border-radius:var(--radius); font-family:'IBM Plex Sans', sans-serif; font-size:0.95rem;">
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Mode</label>
+        <div style="display:flex; gap:0.75rem;">
+          <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem; text-transform:none; letter-spacing:0; color:var(--text); cursor:pointer;">
+            <input type="radio" name="mode" value="standard" id="mode-standard" checked style="width:auto;">
+            Standard Mode
+          </label>
+          <label style="display:flex; align-items:center; gap:0.4rem; font-size:0.9rem; text-transform:none; letter-spacing:0; color:var(--text); cursor:pointer;">
+            <input type="radio" name="mode" value="junior" id="mode-junior" style="width:auto;">
+            Junior Mode
+          </label>
+        </div>
+        <div id="mode-desc" style="color: var(--text-dim); font-size: 0.85rem; margin-top: 0.5rem;"></div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="res-adults">Guests (12 and over)</label>
+          <input type="number" id="res-adults" min="0" value="2">
+        </div>
+        <div class="field">
+          <label for="res-children">Guests (under 12)</label>
+          <input type="number" id="res-children" min="0" value="0">
+        </div>
+      </div>
+
+      <div class="summary-row total">
+        <span>Estimated total</span>
+        <span id="price-preview">$0.00</span>
+      </div>
+    </div>
+
+    <button class="btn-primary" id="add-btn" onclick="handleAdd(event)" style="width:100%;">Add to cart</button>
+
+    <div class="notice">Reservations are subject to availability at the attraction. Guests under 12 must be accompanied by an adult.</div>
   </main>
 
   <script src="shop.js"></script>
   <script>
-    function renderEvents() {
-      const list = document.getElementById("event-list");
-      list.innerHTML = EVENTS.map(ev => `
-        <div class="stub">
-          <div class="stub-main">
-            <h3>${ev.name}</h3>
-            <div class="stub-meta">${ev.date} · ${ev.venue}</div>
-          </div>
-          <div class="stub-tear"></div>
-          <div class="stub-side">
-            <div class="stub-price">${formatPrice(ev.price)}</div>
-            <button class="btn-primary" onclick="handleAdd('${ev.id}', this)">Add to cart</button>
-          </div>
-        </div>
-      `).join("");
+    function populateTimeSlots() {
+      const select = document.getElementById("res-time");
+      select.innerHTML = TICKET.timeSlots.map(t => `<option value="${t}">${t}</option>`).join("");
     }
 
-    function handleAdd(id, btn) {
-      addToCart(id);
+    function setMinDate() {
+      const dateInput = document.getElementById("res-date");
+      const today = new Date().toISOString().slice(0, 10);
+      dateInput.min = today;
+      dateInput.value = today;
+    }
+
+    function currentSelection() {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      const adults = Math.max(0, parseInt(document.getElementById("res-adults").value, 10) || 0);
+      const children = Math.max(0, parseInt(document.getElementById("res-children").value, 10) || 0);
+      return { mode, adults, children };
+    }
+
+    function updatePreview() {
+      const { mode, adults, children } = currentSelection();
+      const modeInfo = TICKET.modes[mode];
+
+      document.getElementById("mode-desc").textContent =
+        `${modeInfo.label}: ${formatPrice(modeInfo.adultPrice)} per guest, ${formatPrice(modeInfo.childPrice)} per guest under 12.`;
+
+      const total = adults * modeInfo.adultPrice + children * modeInfo.childPrice;
+      document.getElementById("price-preview").textContent = formatPrice(total);
+    }
+
+    function handleAdd(e) {
+      const btn = e.target;
+      const date = document.getElementById("res-date").value;
+      const time = document.getElementById("res-time").value;
+      const { mode, adults, children } = currentSelection();
+
+      if (!date) {
+        alert("Please choose a date.");
+        return;
+      }
+      if (adults + children < 1) {
+        alert("Please add at least one guest.");
+        return;
+      }
+
+      addBooking({ date, time, mode, adults, children });
       updateCartBadge();
+
       const original = btn.textContent;
       btn.textContent = "Added ✓";
       btn.disabled = true;
@@ -59,7 +134,14 @@
       }, 900);
     }
 
-    renderEvents();
+    populateTimeSlots();
+    setMinDate();
+    updatePreview();
+
+    document.getElementById("res-adults").addEventListener("input", updatePreview);
+    document.getElementById("res-children").addEventListener("input", updatePreview);
+    document.querySelectorAll('input[name="mode"]').forEach(el => el.addEventListener("change", updatePreview));
   </script>
+  <audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
 </body>
 </html>

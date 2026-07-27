@@ -1,15 +1,25 @@
-const EVENTS = [
-  { id: "twilight-tour", name: "Twilight Tour of the West Wing", date: "Nightly, 6:00 PM", venue: "Cadaver Mansion", price: 28 },
-  { id: "candlelit-tour", name: "Candlelit Evening Walkthrough", date: "Nightly, 8:30 PM", venue: "Cadaver Mansion", price: 42 },
-  { id: "full-moon-vigil", name: "Full Moon Vigil", date: "Next full moon, 11:00 PM", venue: "Cadaver Mansion, Attic", price: 60 },
-  { id: "family-day-tour", name: "Family Day Tour", date: "Saturdays, 11:00 AM", venue: "Cadaver Mansion, Grounds", price: 18 },
-];
+const TICKET = {
+  id: "dinner-party",
+  name: "Mr. and Mrs. Cadaver's Dinner Party",
+  venue: "Cadaver Mansion",
+  modes: {
+    standard: { label: "Standard Mode", adultPrice: 65, childPrice: 45 },
+    junior:   { label: "Junior Mode",   adultPrice: 50, childPrice: 35 }
+  },
+  timeSlots: ["6:00 PM", "7:30 PM", "9:00 PM"]
+};
 
 const CART_KEY = "manorCart";
 
 function getCart() {
   try {
-    return JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    const cart = JSON.parse(localStorage.getItem(CART_KEY)) || [];
+    // Drop any entries from an older cart data shape (missing bookingId)
+    const clean = cart.filter(b => b && b.bookingId && b.date && b.mode);
+    if (clean.length !== cart.length) {
+      saveCart(clean);
+    }
+    return clean;
   } catch {
     return [];
   }
@@ -19,48 +29,66 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function addToCart(eventId) {
+function addBooking(booking) {
   const cart = getCart();
-  const existing = cart.find(item => item.id === eventId);
-  if (existing) {
-    existing.qty += 1;
-  } else {
-    cart.push({ id: eventId, qty: 1 });
-  }
+  cart.push({
+    bookingId: "bk_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7),
+    date: booking.date,
+    time: booking.time,
+    mode: booking.mode,
+    adults: booking.adults,
+    children: booking.children
+  });
   saveCart(cart);
 }
 
-function removeFromCart(eventId) {
-  const cart = getCart().filter(item => item.id !== eventId);
+function removeFromCart(bookingId) {
+  const cart = getCart().filter(b => b.bookingId !== bookingId);
   saveCart(cart);
 }
 
-function updateQty(eventId, qty) {
-  const cart = getCart();
-  const item = cart.find(i => i.id === eventId);
-  if (item) {
-    item.qty = Math.max(1, qty);
-    saveCart(cart);
-  }
+function priceForBooking(booking) {
+  const modeInfo = TICKET.modes[booking.mode] || TICKET.modes.standard;
+  return booking.adults * modeInfo.adultPrice + booking.children * modeInfo.childPrice;
 }
 
 function cartWithDetails() {
-  return getCart().map(item => {
-    const details = EVENTS.find(e => e.id === item.id);
-    return { ...details, qty: item.qty };
-  }).filter(item => item.name);
+  return getCart().map(b => {
+    const modeInfo = TICKET.modes[b.mode] || TICKET.modes.standard;
+    const guestParts = [];
+    if (b.adults > 0) guestParts.push(`${b.adults} adult${b.adults === 1 ? "" : "s"}`);
+    if (b.children > 0) guestParts.push(`${b.children} child${b.children === 1 ? "" : "ren"} (under 12)`);
+    return {
+      bookingId: b.bookingId,
+      name: TICKET.name,
+      venue: TICKET.venue,
+      date: b.date,
+      time: b.time,
+      modeLabel: modeInfo.label,
+      adults: b.adults,
+      children: b.children,
+      guestLabel: guestParts.join(" · "),
+      price: priceForBooking(b)
+    };
+  });
 }
 
 function cartTotal() {
-  return cartWithDetails().reduce((sum, item) => sum + item.price * item.qty, 0);
+  return cartWithDetails().reduce((sum, item) => sum + item.price, 0);
 }
 
 function cartCount() {
-  return getCart().reduce((sum, item) => sum + item.qty, 0);
+  return getCart().length;
 }
 
 function formatPrice(n) {
   return `$${n.toFixed(2)}`;
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return "";
+  const d = new Date(dateStr + "T00:00:00");
+  return d.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
 }
 
 function generateOrderNumber() {
@@ -78,4 +106,21 @@ function updateCartBadge() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", updateCartBadge);
+function initAmbientChime() {
+  const chime = document.getElementById("chime-audio");
+  if (!chime) return;
+  chime.volume = 0.18;
+
+  function unlockChime() {
+    chime.play().catch(() => {});
+    document.removeEventListener("pointerdown", unlockChime);
+  }
+
+  document.addEventListener("pointerdown", unlockChime);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  updateCartBadge();
+  initAmbientChime();
+});
+

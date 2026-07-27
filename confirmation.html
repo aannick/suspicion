@@ -43,8 +43,8 @@
           <div class="eyebrow">Order confirmed</div>
           <div class="order-num">${order.orderNumber}</div>
           <p style="color: var(--text-dim);">
-            ${order.items.map(i => `${i.qty} × ${i.name}`).join("<br>")}
-          </p>
+  			${order.items.map(i => `${formatDate(i.date)}, ${i.time} · ${i.modeLabel} · ${i.guestLabel}`).join("<br>")}
+		  </p>
           <p class="mono" style="font-size: 1.1rem; color: var(--brass); margin-top: 1rem;">
             ${formatPrice(order.total)} paid
           </p>
@@ -57,5 +57,6 @@
 
     renderConfirmation();
   </script>
+  <audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
 </body>
 </html>

@@ -26,7 +26,7 @@
     <div id="cart-summary"></div>
   </main>
 
-  <script src="shop.js"></script>
+ <script src="shop.js"></script>
   <script>
     function renderCart() {
       const items = cartWithDetails();
@@ -34,7 +34,7 @@
       const summary = document.getElementById("cart-summary");
 
       if (items.length === 0) {
-        list.innerHTML = `<div class="empty-state">Your cart is empty. <a href="tickets.html">Browse tours →</a></div>`;
+        list.innerHTML = `<div class="empty-state">Your cart is empty. <a href="tickets.html">Reserve a seat →</a></div>`;
         summary.innerHTML = "";
         return;
       }
@@ -43,17 +43,13 @@
         <div class="stub">
           <div class="stub-main">
             <h3>${item.name}</h3>
-            <div class="stub-meta">${item.date} · ${item.venue}</div>
-            <div style="margin-top:0.6rem; display:flex; align-items:center; gap:0.5rem;">
-              <label style="font-size:0.8rem; color:var(--text-dim);">Qty</label>
-              <input type="number" min="1" value="${item.qty}" style="width:60px; background:var(--bg); border:1px solid var(--stub-edge); color:var(--text); padding:0.3rem; border-radius:4px;"
-                onchange="handleQtyChange('${item.id}', this.value)">
-              <button class="btn-danger" style="margin-left:0.75rem; padding:0.4rem 0.7rem;" onclick="handleRemove('${item.id}')">Remove</button>
-            </div>
+            <div class="stub-meta">${formatDate(item.date)} · ${item.time} · ${item.modeLabel}</div>
+            <div class="stub-meta" style="margin-top:0.35rem;">${item.guestLabel}</div>
+            <button class="btn-danger" style="margin-top:0.75rem; padding:0.4rem 0.7rem;" onclick="handleRemove('${item.bookingId}')">Remove</button>
           </div>
           <div class="stub-tear"></div>
           <div class="stub-side">
-            <div class="stub-price">${formatPrice(item.price * item.qty)}</div>
+            <div class="stub-price">${formatPrice(item.price)}</div>
           </div>
         </div>
       `).join("");
@@ -68,19 +64,14 @@
       `;
     }
 
-    function handleQtyChange(id, val) {
-      updateQty(id, parseInt(val, 10) || 1);
-      renderCart();
-      updateCartBadge();
-    }
-
-    function handleRemove(id) {
-      removeFromCart(id);
+    function handleRemove(bookingId) {
+      removeFromCart(bookingId);
       renderCart();
       updateCartBadge();
     }
 
     renderCart();
   </script>
+  <audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
 </body>
 </html>
