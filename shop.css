@@ -231,3 +231,160 @@ button:disabled { background: var(--stub-edge); color: var(--text-dim); cursor: 
   .stub-tear { display: none; }
   .field-row { flex-direction: column; gap: 0; }
 }
+
+/* --- Bar / menu page --- */
+.menu-photo {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--stub-edge);
+  border-radius: var(--radius);
+  margin: 1.5rem 0 2.5rem;
+  display: block;
+}
+
+.drink-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.drink-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--stub-edge);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.drink-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background:
+    repeating-linear-gradient(45deg, rgba(201,162,39,0.05) 0 12px, transparent 12px 24px),
+    var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--stub-edge);
+}
+
+.drink-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.drink-photo .placeholder-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.drink-info { padding: 1rem 1.1rem 1.2rem; }
+
+.drink-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.drink-desc {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+}
+
+.drink-price {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--brass);
+  font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+  .drink-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 460px) {
+  .drink-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Merch page --- */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.product-card {
+  background: var(--bg-raised);
+  border: 1px solid var(--stub-edge);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-photo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background:
+    repeating-linear-gradient(45deg, rgba(201,162,39,0.05) 0 12px, transparent 12px 24px),
+    var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--stub-edge);
+}
+
+.product-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.product-photo .placeholder-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  text-align: center;
+  padding: 0 1rem;
+}
+
+.product-info { padding: 1rem 1.1rem 1.2rem; flex: 1; display: flex; flex-direction: column; }
+
+.product-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.product-desc {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+  margin-bottom: 0.6rem;
+  flex: 1;
+}
+
+.product-price {
+  font-family: 'IBM Plex Mono', monospace;
+  color: var(--brass);
+  font-size: 0.95rem;
+  margin-bottom: 0.8rem;
+}
+
+@media (max-width: 700px) {
+  .product-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 460px) {
+  .product-grid { grid-template-columns: 1fr; }
+}
