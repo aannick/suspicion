@@ -28,7 +28,7 @@
       Available to guests on the night of the tour.
     </p>
 
-    <img src="menu.png" alt="What's Your Poison? drink menu" class="menu-photo">
+    <img src="drinks.png" alt="What's Your Poison? drink menu" class="menu-photo">
 
     <div class="drink-grid" id="drink-grid"></div>
   </main>
@@ -38,12 +38,12 @@
     // Fill in real photo filenames and details as they're ready.
     // Any image that fails to load falls back to a labeled placeholder.
     const DRINKS = [
-      { name: "Capital Cosmo", desc: "2 oz vodka, 1 oz triple sec, 1 oz cranberry juice, ½ oz lime juice", price: "15", img: "cosmo.jpg" },
-      { name: "Four Star Sidecar", desc: "2 oz brandy, 1 oz triple sec, 1 oz lemon juice", price: "15", img: "sidecar.jpg" },
-      { name: "Vivid Lemonade", desc: "2 oz vodka, 1 oz Blue Curaçao, 1 oz sweet and sour mix, 4 oz lemon-lime soda", price: "15", img: "lemon.jpg" },
-      { name: "Liberty Club", desc: "2 oz gin, 1 oz lemon juice, ½ oz brandied cherry sauce, ½ oz cranberry juice, 1 egg white", price: "15", img: "liberty.jpg" },
-      { name: "Gold Fashioned", desc: "2 oz rye, ½ oz simple syrup, Dash orange bitters", price: "15", img: "gold.jpg" },
-      { name: "U.S. Mint Julep", desc: "3 oz bourbon, 1 oz simple syrup, 12 mint leaves", price: "15", img: "julep.jpg" }
+      { name: "Capital Cosmo", desc: "2 oz vodka, 1 oz triple sec, 1 oz cranberry juice, ½ oz lime juice", img: "cosmo.jpg" },
+      { name: "Four Star Sidecar", desc: "2 oz brandy, 1 oz triple sec, 1 oz lemon juice", img: "sidecar.jpg" },
+      { name: "Vivid Lemonade", desc: "2 oz vodka, 1 oz Blue Curaçao, 1 oz sweet and sour mix, 4 oz lemon-lime soda", img: "lemon.jpg" },
+      { name: "Liberty Club", desc: "2 oz gin, 1 oz lemon juice, ½ oz brandied cherry sauce, ½ oz cranberry juice, 1 egg white", img: "liberty.jpg" },
+      { name: "Gold Fashioned", desc: "2 oz rye, ½ oz simple syrup, Dash orange bitters", img: "gold.jpg" },
+      { name: "U.S. Mint Julep", desc: "3 oz bourbon, 1 oz simple syrup, 12 mint leaves", img: "julep.jpg" }
     ];
 
     function renderDrinks() {
@@ -56,7 +56,6 @@
           <div class="drink-info">
             <h3>${d.name}</h3>
             ${d.desc ? `<div class="drink-desc">${d.desc}</div>` : ""}
-            ${d.price ? `<div class="drink-price">${d.price}</div>` : ""}
           </div>
         </div>
       `).join("");
