@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merchandise — Cadaver Mansion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <header class="site">
+    <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">CADAVER<span> MANSION</span></a>
+    <nav>
+      <a href="tickets.html">Tours</a>
+      <a href="bar.html">Bar</a>
+      <a href="merch.html">Merch</a>
+      <a href="cart.html" data-cart-count>Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">Gift Shop</div>
+    <h1>Take a piece of the manor home</h1>
+    <p style="color: var(--text-dim); margin-bottom: 1.5rem;">
+      Souvenirs from Cadaver Mansion, available at the gift shop on the night of your tour.
+    </p>
+
+    <div class="product-grid" id="product-grid"></div>
+  </main>
+
+  <script src="shop.js"></script>
+  <script>
+    // Fill in real photo filenames, descriptions, and prices as they're ready.
+    // Any image that fails to load falls back to a labeled placeholder.
+    const PRODUCTS = [
+      { name: "Product 1", desc: "", price: "", img: "merch-1.jpg" },
+      { name: "Product 2", desc: "", price: "", img: "merch-2.jpg" },
+      { name: "Product 3", desc: "", price: "", img: "merch-3.jpg" },
+      { name: "Product 4", desc: "", price: "", img: "merch-4.jpg" },
+      { name: "Product 5", desc: "", price: "", img: "merch-5.jpg" },
+      { name: "Product 6", desc: "", price: "", img: "merch-6.jpg" }
+    ];
+
+    function renderProducts() {
+      const grid = document.getElementById("product-grid");
+      grid.innerHTML = PRODUCTS.map(p => `
+        <div class="product-card">
+          <div class="product-photo">
+            <img src="${p.img}" alt="${p.name}" onerror="this.remove(); this.parentElement.insertAdjacentHTML('beforeend', '<span class=&quot;placeholder-label&quot;>Photo coming soon<br>(${p.img})</span>')">
+          </div>
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            ${p.desc ? `<div class="product-desc">${p.desc}</div>` : `<div class="product-desc"></div>`}
+            ${p.price ? `<div class="product-price">${p.price}</div>` : ""}
+            <button class="btn-secondary" disabled style="width:100%;">Available in person</button>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    renderProducts();
+  </script>
+  <audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
+</body>
+</html>

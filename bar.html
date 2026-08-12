@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>What's Your Poison? — Cadaver Mansion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="shop.css">
+</head>
+<body>
+
+  <header class="site">
+    <a href="index.html" class="brand" style="text-decoration:none; color:inherit;">CADAVER<span> MANSION</span></a>
+    <nav>
+      <a href="tickets.html">Tours</a>
+      <a href="bar.html">Bar</a>
+      <a href="merch.html">Merch</a>
+      <a href="cart.html" data-cart-count>Cart</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="eyebrow">The Parlour Bar</div>
+    <h1>What's Your Poison?</h1>
+    <p style="color: var(--text-dim); margin-bottom: 1.5rem;">
+      Before — or after — your evening with Mr. and Mrs. Cadaver, stop by the parlour for a drink.
+      Available to guests on the night of the tour.
+    </p>
+
+    <img src="menu.png" alt="What's Your Poison? drink menu" class="menu-photo">
+
+    <div class="drink-grid" id="drink-grid"></div>
+  </main>
+
+  <script src="shop.js"></script>
+  <script>
+    // Fill in real photo filenames and details as they're ready.
+    // Any image that fails to load falls back to a labeled placeholder.
+    const DRINKS = [
+      { name: "Capital Cosmo", desc: "2 oz vodka, 1 oz triple sec, 1 oz cranberry juice, ½ oz lime juice", price: "15", img: "cosmo.jpg" },
+      { name: "Four Star Sidecar", desc: "2 oz brandy, 1 oz triple sec, 1 oz lemon juice", price: "15", img: "sidecar.jpg" },
+      { name: "Vivid Lemonade", desc: "2 oz vodka, 1 oz Blue Curaçao, 1 oz sweet and sour mix, 4 oz lemon-lime soda", price: "15", img: "lemon.jpg" },
+      { name: "Liberty Club", desc: "2 oz gin, 1 oz lemon juice, ½ oz brandied cherry sauce, ½ oz cranberry juice, 1 egg white", price: "15", img: "liberty.jpg" },
+      { name: "Gold Fashioned", desc: "2 oz rye, ½ oz simple syrup, Dash orange bitters", price: "15", img: "gold.jpg" },
+      { name: "U.S. Mint Julep", desc: "3 oz bourbon, 1 oz simple syrup, 12 mint leaves", price: "15", img: "julep.jpg" }
+    ];
+
+    function renderDrinks() {
+      const grid = document.getElementById("drink-grid");
+      grid.innerHTML = DRINKS.map(d => `
+        <div class="drink-card">
+          <div class="drink-photo">
+            <img src="${d.img}" alt="${d.name}" onerror="this.remove(); this.parentElement.insertAdjacentHTML('beforeend', '<span class=&quot;placeholder-label&quot;>Photo coming soon<br>(${d.img})</span>')">
+          </div>
+          <div class="drink-info">
+            <h3>${d.name}</h3>
+            ${d.desc ? `<div class="drink-desc">${d.desc}</div>` : ""}
+            ${d.price ? `<div class="drink-price">${d.price}</div>` : ""}
+          </div>
+        </div>
+      `).join("");
+    }
+
+    renderDrinks();
+  </script>
+  <audio id="chime-audio" src="sounds/wind_chimes.mp3" loop></audio>
+</body>
+</html>
